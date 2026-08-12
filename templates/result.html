@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Prediction Result</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Insurance Fraud Detection
+    </div>
+
+   <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/predict">Predict</a></li>
+    <li><a href="/about">About Us</a></li>
+</ul>
+
+</nav>
+
+<div class="hero">
+
+    <div class="container result-card">
+
+        <h1>🛡 Insurance Fraud Detection</h1>
+
+        <h2>Prediction Result</h2>
+
+<div class="result-box">
+
+    <h1>{{ prediction }}</h1>
+
+    <hr>
+
+   <div class="result-details">
+
+    <p>
+        🚦 <strong>Risk Level:</strong> {{ risk }}
+    </p>
+
+    <p>
+        📊 <strong>Confidence:</strong> {{ confidence }}%
+    </p>
+
+    <p>
+        💡 <strong>Recommendation:</strong> {{ recommendation }}
+    </p>
+
+</div>
+        <div class="button-group">
+
+    <a href="/predict">
+        <button type="button" class="predict-btn">
+            ➕ New Claim
+        </button>
+    </a>
+
+    <a href="/dashboard">
+        <button type="button" class="predict-btn">
+            📊 Dashboard
+        </button>
+    </a>
+
+</div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

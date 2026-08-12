@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Insurance Fraud</title>
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/predict.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <span>Insurance Fraud Detection</span>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/predict" class="active">Predict</a></li>
+        <li><a href="/about">About Us</a></li>
+    </ul>
+
+</nav>
+
+<section class="predict-page">
+
+    <div class="predict-container">
+
+        <!-- Left Panel -->
+
+        <div class="predict-left">
+
+            <span class="predict-badge">
+                AI Powered Risk Analysis
+            </span>
+
+            <h1>
+                Insurance Claim
+                <span>Prediction</span>
+            </h1>
+
+            <p>
+                Enter the claim details to let the Machine Learning model
+                determine whether the insurance claim is likely to be
+                Fraudulent or Genuine.
+            </p>
+
+            <div class="info-box">
+
+                <h3>Prediction Process</h3>
+
+                <ul>
+
+                    <li>✔ Customer Verification</li>
+
+                    <li>✔ Claim Analysis</li>
+
+                    <li>✔ Incident Validation</li>
+
+                    <li>✔ AI Fraud Detection</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- Right Panel -->
+
+        <div class="predict-right">
+
+            <form action="/predict" method="POST">
+
+            
+    <h3 class="section-title">
+
+<i class="fas fa-user"></i>
+
+👤 Customer Information
+
+</h3>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label>Customer Age</label>
+           <input
+type="number"
+name="Customer_Age"
+min="18"
+max="100"
+placeholder="Enter customer age"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Months As Customer</label>
+            <input
+type="number"
+name="Months_As_Customer"
+min="0"
+placeholder="Months as customer"
+autocomplete="off"
+required>
+        </div>
+
+    </div>
+
+    <h3 class="section-title">
+
+<i class="fas fa-file-invoice-dollar"></i>
+
+💰 Claim Information
+
+</h3>
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label>Premium Amount ($)</label>
+            <input
+type="number"
+name="Premium_Amount"
+placeholder="Enter premium amount"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Claim Amount ($)</label>
+            <input
+type="number"
+name="Claim_Amount"
+placeholder="Enter claim amount"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Vehicle Claim ($)</label>
+            <input
+type="number"
+name="Vehicle_Claim"
+placeholder="Vehicle claim amount"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Property Claim ($)</label>
+            <input
+type="number"
+name="Property_Claim"
+placeholder="Property claim amount"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Injury Claim ($)</label>
+            <input
+type="number"
+name="Injury_Claim"
+placeholder="Injury claim amount"
+autocomplete="off"
+required>
+        </div>
+
+    </div>
+
+    <h3 class="section-title">
+
+<i class="fas fa-car-crash"></i>
+
+Incident Information
+
+</h3>
+
+    <div class="form-grid">
+
+        <div class="form-group">
+            <label>Incident Type</label>
+            <select name="Incident_Type" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Single Vehicle Collision">Single Vehicle Collision</option>
+                <option value="Multi-vehicle Collision">Multi-vehicle Collision</option>
+                <option value="Vehicle Theft">Vehicle Theft</option>
+                <option value="Parked Car">Parked Car</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Collision Type</label>
+            <select name="Collision_Type" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Front Collision">Front Collision</option>
+                <option value="Rear Collision">Rear Collision</option>
+                <option value="Side Collision">Side Collision</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Damage Severity</label>
+            <select name="Damage_Severity" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Minor Damage">Minor Damage</option>
+                <option value="Major Damage">Major Damage</option>
+                <option value="Total Loss">Total Loss</option>
+                <option value="Trivial Damage">Trivial Damage</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Witness Count</label>
+            <input
+type="number"
+name="Witness_Count"
+min="0"
+max="10"
+placeholder="Number of witnesses"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Police Report</label>
+            <select name="Police_Report" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Property Damage</label>
+            <select name="Property_Damage" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Incident Hour</label>
+            <input
+type="number"
+name="Incident_Hour_Of_The_Day"
+min="0"
+max="23"
+placeholder="0 - 23"
+autocomplete="off"
+required>
+        </div>
+
+        <div class="form-group">
+            <label>Investigation Required</label>
+            <select name="Investigation_Required" required>
+                <option value="" selected disabled>-- Select Option --</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+
+    </div>
+
+    <button type="submit" class="predict-btn">
+    <i class="fas fa-magnifying-glass-chart"></i>
+    Analyze Claim
+    </button>
+
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+
+    <i class="fas fa-shield-alt"></i>
+
+    <span>Insurance Fraud Detection</span>
+
+</div>
+
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/predict">Predict</a></li>
+        <li><a href="/about">About</a></li>
+    </ul>
+
+</nav>
+
+<section class="dashboard-page">
+
+<div class="dashboard-container">
+
+    <!-- TOP KPI CARDS -->
+    <div class="dashboard-stats">
+
+        <div class="stat-card">
+            <h2 id="totalClaims" data-target="{{ total_claims }}">0</h2>
+
+            <p>Total Claims</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 id="fraudClaims" data-target="{{ fraud_claims }}">0</h2>
+
+            <p>Fraud Claims</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 id="genuineClaims" data-target="{{ genuine_claims }}">0</h2>
+            <p>Genuine Claims</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 id="fraudRate" data-target="{{ fraud_rate }}">0%</h2>
+        </div>
+
+    </div>
+
+
+    <!-- ==========================
+         TOP DASHBOARD ROW
+    =========================== -->
+
+   <!-- ==========================
+     TOP DASHBOARD ROW
+=========================== -->
+
+<div class="dashboard-top">
+
+    <!-- LEFT: Line Chart -->
+    <div class="dashboard-card line-card">
+
+        <h3>Claim Amount Projection</h3>
+
+        <div class="chart-container">
+            <canvas id="projectionChart"></canvas>
+        </div>
+
+    </div>
+
+
+    <!-- RIGHT SIDE -->
+    <div class="dashboard-right">
+
+        <!-- Donut Chart -->
+        <div class="dashboard-card donut-card">
+
+            <h3>Fraud Distribution</h3>
+
+            <div class="donut-content">
+
+                <canvas id="fraudChart"></canvas>
+
+                <div class="fraud-legend">
+
+                    <div class="legend-item">
+                        <span class="legend-box fraud"></span>
+                        <span>Fraud</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-box genuine"></span>
+                        <span>Genuine</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Top Vehicle Makes -->
+        <div class="dashboard-card table-card">
+
+            <h3>Top Vehicle Makes</h3>
+
+            <table class="dashboard-table">
+
+                <thead>
+                    <tr>
+                        <th>Vehicle</th>
+                        <th>Claims</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr><td>Honda</td><td>145</td></tr>
+                    <tr><td>Toyota</td><td>122</td></tr>
+                    <tr><td>BMW</td><td>91</td></tr>
+                    <tr><td>Ford</td><td>83</td></tr>
+                    <tr><td>Audi</td><td>71</td></tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div> <!-- dashboard-right -->
+            <!-- Leaderboard -->
+            
+
+                
+
+
+    <!-- ==========================
+         SECOND ROW
+    =========================== -->
+
+    <div class="dashboard-bottom">
+
+        <!-- KPI Cards -->
+        <div class="dashboard-card metrics-card">
+
+            <h3>Claim Insights</h3>
+
+            <div class="metric-grid">
+
+                <div class="metric">
+                    <span>Avg Claim</span>
+                    <h2>$8,200</h2>
+                </div>
+
+                <div class="metric">
+                    <span>High Risk</span>
+                    <h2>247</h2>
+                </div>
+
+                <div class="metric">
+                    <span>Approval</span>
+                    <h2>75%</h2>
+                </div>
+
+                <div class="metric">
+                    <span>Rejected</span>
+                    <h2>25%</h2>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="dashboard-card large-card">
+
+    <h3>Claims by Incident Type</h3>
+
+    <div class="chart-container">
+        <canvas id="incidentChart"></canvas>
+    </div>
+
+</div>
+
+    </div>
+
+</div>
+
+</section>
+<script>
+
+// =========================
+// Counter Animation
+// =========================
+
+const counters = document.querySelectorAll("[data-target]");
+
+counters.forEach(counter => {
+
+    const target = parseFloat(counter.dataset.target);
+
+    const isPercent = counter.dataset.target.includes(".") ||
+                      counter.innerHTML.includes("%");
+
+    let current = 0;
+
+    const step = target / 60;
+
+    function update(){
+
+        current += step;
+
+        if(current < target){
+
+            if(isPercent){
+                counter.innerHTML = current.toFixed(1) + "%";
+            }else{
+                counter.innerHTML = Math.floor(current);
+            }
+
+            requestAnimationFrame(update);
+
+        }else{
+
+            if(isPercent){
+                counter.innerHTML = target + "%";
+            }else{
+                counter.innerHTML = target;
+            }
+
+        }
+
+    }
+
+    update();
+
+});
+
+
+// =========================
+// Fraud vs Genuine Chart
+// =========================
+
+const fraudClaims = Number("{{ fraud_claims|default(0) }}");
+const genuineClaims = Number("{{ genuine_claims|default(0) }}");
+
+const fraudCtx = document.getElementById("fraudChart");
+
+if (fraudCtx) {
+
+    new Chart(fraudCtx, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: ["Fraud", "Genuine"],
+
+            datasets: [{
+
+                data: [
+                    fraudClaims,
+                    genuineClaims
+                ],
+
+                backgroundColor: [
+                    "#4FFFD5",
+                    "#2563EB"
+                ],
+
+                borderWidth: 0
+
+            }]
+
+        },
+
+        options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 1,
+
+    plugins: {
+    legend: {
+        display: false
+    }
+}
+
+        }
+
+    });
+
+}
+// =========================
+// Monthly Claims Trend
+// =========================
+
+
+// =========================
+// Claim Amount Projection
+// =========================
+
+
+
+// =========================
+// Claim Amount Projection Chart
+// =========================
+
+const projectionCtx = document.getElementById("projectionChart");
+
+if (projectionCtx) {
+
+    const gradient = projectionCtx.getContext("2d").createLinearGradient(0, 0, 0, 350);
+
+    gradient.addColorStop(0, "rgba(79,255,213,0.45)");
+    gradient.addColorStop(1, "rgba(79,255,213,0.03)");
+
+    new Chart(projectionCtx, {
+
+        type: "line",
+
+        data: {
+
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+
+            datasets: [{
+
+                label: "Projected Claim Amount",
+
+                data: [5200, 6100, 7200, 6800, 7900, 8600],
+
+                borderColor: "#4FFFD5",
+
+                backgroundColor: gradient,
+
+                fill: true,
+
+                tension: 0.4,
+
+                borderWidth: 3,
+
+                pointRadius: 5,
+
+                pointBackgroundColor: "#4FFFD5",
+
+                pointBorderColor: "#ffffff",
+
+                pointBorderWidth: 2
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+            
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
+            },
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+                        color: "#E5E7EB"
+                    },
+
+                    grid: {
+                        color: "rgba(255,255,255,.06)"
+                    }
+
+                },
+
+                y: {
+
+                    ticks: {
+
+                        color: "#E5E7EB",
+
+                        callback: function(value){
+                            return "$" + value;
+                        }
+
+                    },
+
+                    grid: {
+                        color: "rgba(255,255,255,.06)"
+                    }
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+// =========================
+// Claims by Incident Type
+// =========================
+
+const incidentCtx = document.getElementById("incidentChart");
+
+if (incidentCtx) {
+
+    new Chart(incidentCtx, {
+
+        type: "bar",
+
+        data: {
+            labels: [
+                "Single Vehicle",
+                "Multi Vehicle",
+                "Parked Car",
+                "Theft"
+            ],
+
+            datasets: [{
+                label: "Claims",
+
+                data: [220, 180, 90, 40],
+
+                backgroundColor: [
+                    "#4FFFD5",
+                    "#3EE7C2",
+                    "#2AB8AE",
+                    "#1F8F88"
+                ],
+
+                borderRadius: 10
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            interaction: {
+                mode: "index",
+                intersect: true
+            },
+
+            plugins: {
+
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    enabled: true
+                }
+
+            },
+
+            scales: {
+
+                x: {
+                    ticks: {
+                        color: "#E5E7EB"
+                    },
+
+                    grid: {
+                        color: "rgba(255,255,255,.06)"
+                    }
+                },
+
+                y: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        color: "#E5E7EB"
+                    },
+
+                    grid: {
+                        color: "rgba(255,255,255,.06)"
+                    }
+                }
+
+            }
+
+        }
+
+    });
+
+}
+</script>
+
+</body>
+</html>
