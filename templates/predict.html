@@ -184,19 +184,20 @@ Incident Information
     <div class="form-grid">
 
         <div class="form-group">
-            <label>Incident Type</label>
-            <select name="Incident_Type" required>
-                <option value="" selected disabled>-- Select Option --</option>
-                <option value="Single Vehicle Collision">Single Vehicle Collision</option>
-                <option value="Multi-vehicle Collision">Multi-vehicle Collision</option>
-                <option value="Vehicle Theft">Vehicle Theft</option>
-                <option value="Parked Car">Parked Car</option>
-            </select>
-        </div>
+    <label>Incident Type</label>
+
+    <select name="Incident_Type" required title="Select incident type">
+        <option value="" selected disabled>-- Select Option --</option>
+        <option value="Single Vehicle Collision">Single Vehicle Collision</option>
+        <option value="Multi-vehicle Collision">Multi-vehicle Collision</option>
+        <option value="Vehicle Theft">Vehicle Theft</option>
+        <option value="Parked Car">Parked Car</option>
+    </select>
+</div>
 
         <div class="form-group">
             <label>Collision Type</label>
-            <select name="Collision_Type" required>
+            <select name="Collision_Type" required title="Select collision type">
                 <option value="" selected disabled>-- Select Option --</option>
                 <option value="Front Collision">Front Collision</option>
                 <option value="Rear Collision">Rear Collision</option>
@@ -206,7 +207,7 @@ Incident Information
 
         <div class="form-group">
             <label>Damage Severity</label>
-            <select name="Damage_Severity" required>
+<select name="Damage_Severity" required title="Select damage severity">
                 <option value="" selected disabled>-- Select Option --</option>
                 <option value="Minor Damage">Minor Damage</option>
                 <option value="Major Damage">Major Damage</option>
@@ -229,7 +230,7 @@ required>
 
         <div class="form-group">
             <label>Police Report</label>
-            <select name="Police_Report" required>
+            <select name="Police_Report" required title="Select police report status">
                 <option value="" selected disabled>-- Select Option --</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -238,7 +239,7 @@ required>
 
         <div class="form-group">
             <label>Property Damage</label>
-            <select name="Property_Damage" required>
+            <select name="Property_Damage" required title="Select property damage status">
                 <option value="" selected disabled>-- Select Option --</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
@@ -258,8 +259,8 @@ required>
         </div>
 
         <div class="form-group">
-            <label>Investigation Required</label>
-            <select name="Investigation_Required" required>
+           <label>Investigation Required</label>
+<select name="Investigation_Required" required title="Select whether investigation is required">
                 <option value="" selected disabled>-- Select Option --</option>
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>

@@ -142,7 +142,8 @@ select:focus{
     justify-content:space-between;
     align-items:center;
 
-    background:rgba(2,11,45,.85);
+    background: rgba(2,11,45,.85);
+-webkit-backdrop-filter: blur(18px);
     backdrop-filter:blur(18px);
 
     border:1px solid rgba(255,255,255,.08);
@@ -478,6 +479,7 @@ select:focus{
 
     transition:.35s;
 
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter:blur(12px);
 
 }
@@ -884,6 +886,7 @@ select:focus{
     border-radius:22px;
     padding:30px 20px;
     text-align:center;
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter:blur(12px);
     transition:.35s;
 
